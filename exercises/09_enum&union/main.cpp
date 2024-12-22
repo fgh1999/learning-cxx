@@ -37,7 +37,10 @@ ColorEnum convert_by_pun(Color c) {
 
     TypePun pun;
     // TODO: 补全类型双关转换
-
+    pun.c = c;
+    // 使用类型双关要比reinterpret_cast<T>()安全，主要是因为 不同数据类型的内存对齐长度不一致
+    // 如果硬件平台允许“非对其访存”的话，那么不会报错。x86可以，riscv不行（使用一个指令load4bytes，但是给出的地址不是4字节对齐的，会触发硬件异常）
+    // 基于union的类型双关，编译器会保证其内各类型的地址都是满足内存对其和大小要求的。
     return pun.e;
 }
 
